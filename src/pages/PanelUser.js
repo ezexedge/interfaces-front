@@ -25,7 +25,7 @@ const [actualizar,setActualizar] = useState(false)
     }
 
     const descargarImage = (id) => {
-      saveAs(`https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${process.env.REACT_APP_URL}/local/${id}&choe=UTF-8`, 'image.jpg') // Put your image url here.
+      saveAs(`https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=https://front-interfazz.herokuapp.com/local/${id}&choe=UTF-8`, 'image.jpg') // Put your image url here.
   
     } 
   
