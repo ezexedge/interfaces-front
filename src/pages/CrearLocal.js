@@ -58,7 +58,7 @@ e.preventDefault();
 
 
 console.log('esto se muestra',obj)
- await axios.post('http://localhost:5000/api/crear-local', obj)
+ await axios.post(`${process.env.REACT_APP_API_BACKEND}/crear-local`, obj)
 
  toast.success('creado correctamente', {
   position: "top-right",
