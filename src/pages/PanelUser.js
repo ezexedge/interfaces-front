@@ -23,6 +23,12 @@ const [actualizar,setActualizar] = useState(false)
       }
     }
 
+    const descargarImage = (id) => {
+      saveAs(`https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${process.env.REACT_APP_URL}/local/${id}&choe=UTF-8`, 'image.jpg') // Put your image url here.
+  
+    } 
+  
+
     const confirmarEliminar = async(id) => {
 
       try{
@@ -93,7 +99,7 @@ const [actualizar,setActualizar] = useState(false)
 
     <a onClick={()=>confirmarEliminar(val.id)} class="mb-2 btn btn-block  btn-danger">eliminar</a>
     <a href="#!" class="btn btn-block  btn-primary">editar</a>
-    <a href="#!" class="btn btn-link">Descargar QR</a>
+    <a href="#!" class="btn btn-link" onClick={()=>descargarImage(val.id)}>Descargar QR</a>
 
 
 
