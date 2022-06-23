@@ -28,7 +28,7 @@ const [actualizar,setActualizar] = useState(false)
       try{
       let pregunta = window.confirm("deseas eliminar este local")
       if(pregunta){
-         await axios.delete(`http://localhost:5000/api/locales/${id}`)
+         await axios.delete(`${process.env.REACT_APP_API_BACKEND}/locales/${id}`)
          setActualizar(true)
          toast.success('eliminado correctamente', {
           position: "top-right",

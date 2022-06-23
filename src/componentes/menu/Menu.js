@@ -1,7 +1,7 @@
 
 import React,{useEffect,useState} from 'react';
 import {Link} from 'react-router-dom'
-import {isAuth,removeLocalStorage} from '../../helpers'
+import {isAuth,removeLocalStorage,removeCookie} from '../../helpers'
 import axios from 'axios';
 import { useHistory,withRouter,Route } from "react-router-dom";
 
@@ -27,6 +27,7 @@ const Menu = () => {
 
 			let result = await axios.post(`${process.env.REACT_APP_API_BACKEND}/logout`, {},{withCredentials: true})
 			console.log('logout',result)
+			removeCookie('jwt')
 			removeLocalStorage('user')
 			history.push('/login')
 
