@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 import { useHistory,withRouter,Route, Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.min.css';
 import Inicio from './Inicio';
-import {getCookie, isAuth,authenticate} from '../helpers'
+import {getCookie, isAuth,authenticate, setCookie} from '../helpers'
 
 function Login() {
 
@@ -35,6 +35,7 @@ try{
 
 
  authenticate(result.data.message)
+ setCookie('jwt',result.data.message.token)
 
  toast.info(`👋 Bienvenido ${result.data.message.nombre} ${result.data.message.apellido}!`, {
   position: "top-right",
