@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const SHORTNAME = 'mi-local'
-const WEBSITE_URL = process.env.REACT_APP_URL
+const WEBSITE_URL = 'http://localhost:3000'
 
 function renderDisqus() {
   if (window.DISQUS === undefined) {
@@ -49,7 +49,7 @@ class DisqusThread extends React.Component {
       window.disqus_url = WEBSITE_URL + path;
     }
 
-    return <div {...other} id="disqus_thread" className='mt-4'  />;
+    return <div {...other} id="disqus_thread"  />;
   }
 }
 

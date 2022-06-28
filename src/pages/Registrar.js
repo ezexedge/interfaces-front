@@ -15,7 +15,7 @@ const Registrar = () => {
   const [cargando,setCargando] = useState(false)
   const history = useHistory();
 
-  const login = async(e) => {
+  const registrarme = async(e) => {
 
 setCargando(true)
 
@@ -46,6 +46,8 @@ try{
 
     
      history.push('/login')
+
+     
 }catch(err){
   setCargando(false)
   toast.error(err.response.data.error, {
@@ -74,8 +76,10 @@ try{
   return (
     <div className="container">
     <div className="row">
+    <h1 className="text-primary text-center mt-2">Crear cuenta</h1>
+    <p className="text-primary text-center mt-2">Encuentra los locales 24 horas mas cercanos ¡en un solo lugar!</p>
         <div className=" d-flex justify-content-center">
-        <form onSubmit={login}>
+        <form onSubmit={registrarme}>
         <div className="form-group">
     <label for="formGroupExampleInput">Nombre</label>
     <input type="text" className="form-control"  onChange={(e)=>setNombre(e.target.value)} id="formGroupExampleInput" placeholder="Example input"/>

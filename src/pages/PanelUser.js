@@ -3,6 +3,7 @@ import React,{useEffect,useState} from 'react';
 import { isAuth} from '../helpers'
 import { toast } from 'react-toastify';
 import { saveAs } from 'file-saver'
+import {Link} from 'react-router-dom'
 
 import { useHistory,Redirect,withRouter } from "react-router-dom";
 
@@ -24,18 +25,12 @@ const [actualizar,setActualizar] = useState(false)
       }
     }
 
-    const descargarImage = (id) => {
-      saveAs(`https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=https://front-interfazz.herokuapp.com/local/${id}&choe=UTF-8`, 'image.jpg') // Put your image url here.
-  
-    } 
-  
-
     const confirmarEliminar = async(id) => {
 
       try{
       let pregunta = window.confirm("deseas eliminar este local")
       if(pregunta){
-         await axios.delete(`${process.env.REACT_APP_API_BACKEND}/locales/${id}`)
+         await axios.delete(`http://localhost:5000/api/locales/${id}`)
          setActualizar(true)
          toast.success('eliminado correctamente', {
           position: "top-right",
@@ -54,8 +49,11 @@ const [actualizar,setActualizar] = useState(false)
      
     }
 
- 
-
+    const descargarImage = (id) => {
+      saveAs(`https://chart.googleapis.com/chart?chs=200x200&cht=qr&chl=${process.env.REACT_APP_URL}/local/${id}&choe=UTF-8`, 'image.jpg') // Put your image url here.
+  
+    } 
+  
     useEffect(()=>{
 
       getLocalesByUser(isAuth().uid)
@@ -93,13 +91,13 @@ const [actualizar,setActualizar] = useState(false)
             {locales !== null && locales.length > 0 ?  locales.map((val,i)=>(
              <>
              <div class="card col-3 m-1 p-0">
-  <img class="card-img-top" src="https://ichef.bbci.co.uk/news/800/cpsprodpb/127AF/production/_110259657_tv058727610.jpg.webp" alt="Card image cap"/>
+             <img class="card-img-top" src={val.imagen} alt="Card image cap"/>
   <div class="card-body">
     <h4 class="card-title">{val.nombre}</h4>
     <div className='d-flex flex-column'>
 
     <a onClick={()=>confirmarEliminar(val.id)} class="mb-2 btn btn-block  btn-danger">eliminar</a>
-    <a href="#!" class="btn btn-block  btn-primary">editar</a>
+    <Link to={`/editar-local/${val.id}`}  class="btn btn-block  btn-primary">editar</Link>
     <a href="#!" class="btn btn-link" onClick={()=>descargarImage(val.id)}>Descargar QR</a>
 
 

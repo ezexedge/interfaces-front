@@ -1,7 +1,7 @@
 
 import React,{useEffect,useState} from 'react';
 import {Link} from 'react-router-dom'
-import {isAuth,removeLocalStorage,removeCookie} from '../../helpers'
+import {isAuth,removeLocalStorage} from '../../helpers'
 import axios from 'axios';
 import { useHistory,withRouter,Route } from "react-router-dom";
 
@@ -25,9 +25,8 @@ const Menu = () => {
 
 		try{
 
-			let result = await axios.post(`${process.env.REACT_APP_API_BACKEND}/logout`, {},{withCredentials: true})
+			let result = await axios.post('http://localhost:5000/api/logout', {},{withCredentials: true})
 			console.log('logout',result)
-			removeCookie('jwt')
 			removeLocalStorage('user')
 			history.push('/login')
 
@@ -45,16 +44,14 @@ const Menu = () => {
 		  <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span className="navbar-toggler-icon"></span>
 		  </button>
-		  <div className="collapse navbar-collapse " id="navbarSupportedContent">
+		  <div className="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul className="navbar-nav mx-auto">
 			  <li className="nav-item">
 				<Link to="/" className="nav-link" >Inicio</Link>
 			  </li>
+			  
 			  <li className="nav-item">
-				<a className="nav-link" href="#discovery">Categorias</a>
-			  </li>
-			  <li className="nav-item">
-				<a className="nav-link" href="#service">Populares</a>
+				<Link className="nav-link" to="/populares">Populares</Link>
 			  </li>
 			
 			</ul>

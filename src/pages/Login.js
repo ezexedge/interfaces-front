@@ -4,15 +4,13 @@ import { toast } from 'react-toastify';
 import { useHistory,withRouter,Route, Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.min.css';
 import Inicio from './Inicio';
-import {getCookie, isAuth,authenticate, setCookie} from '../helpers'
+import {getCookie, isAuth,authenticate,setCookie} from '../helpers'
 
 function Login() {
 
   const [email,setEmail] = useState('')
-  const [user,setUser] = useState()
   const [password,setPassword] = useState('')
   const history = useHistory();
-  const [redirect,setRedirect] = useState(false)
   const [cargando,setCargando] = useState(false)
 
 
@@ -28,14 +26,13 @@ try{
     password: password
   }
 
-  console.log('obb',obj)
 
  let result = await axios.post(`${process.env.REACT_APP_API_BACKEND}/login`, obj,{withCredentials:true})
  
 
 
  authenticate(result.data.message)
- setCookie('jwt',result.data.message.token)
+
 
  toast.info(`👋 Bienvenido ${result.data.message.nombre} ${result.data.message.apellido}!`, {
   position: "top-right",
@@ -50,14 +47,12 @@ try{
 
 isAuth() && history.push('/panel-usuario')
 
- console.log('aca result cookie',result.data.message)
 
 
 
 }catch(err){
   setCargando(false)
 
-  console.log('err',err)
 
   toast.error('error', {
     position: "top-right",
@@ -84,6 +79,7 @@ isAuth() && history.push('/panel-usuario')
   return (
     <div className="container">
     <div className="row">
+    <h1 className="text-primary text-center mt-2">Inicia sesion</h1>
         <div className=" d-flex justify-content-center">
         <form onSubmit={login}>
   <div className="form-group">

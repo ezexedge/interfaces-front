@@ -7,7 +7,7 @@ import { isAuth} from '../helpers'
 
 const Local = () => {
   const {isLoaded} = useLoadScript({
-    googleMapsApiKey: 'AIzaSyAXr-FMeBXB3G1Xq0p7mg8Ek2gUC-BB3a8'
+    googleMapsApiKey: process.env.REACT_APP_API_GOOGLEMAP
   })
 
     const [local,setLocal] = useState(null)
@@ -16,6 +16,7 @@ const Local = () => {
     const [actualizar,setActualizar] = useState(false)
 
     const history = useHistory()
+    
     const param = history.location.pathname.split('/')[2]
 
     const getLocal = async(id) =>{
@@ -23,7 +24,7 @@ const Local = () => {
           let resultado = await axios.get(`${process.env.REACT_APP_API_BACKEND}/locales/${id}`)
           
           setLocal(resultado.data.message)
-          console.log("resultado de locales",resultado.data.message)
+
           likeOrNotLike(resultado.data.message.likes)
           dislikeOrNotDislike(resultado.data.message.dislikes)
 
@@ -36,8 +37,7 @@ const Local = () => {
         const likes = async() => {
 
           try{
-            let result = await axios.put(`${process.env.REACT_APP_API_BACKEND}/likes/${history.location.pathname.split('/')[2]}/${isAuth().uid}`,{},{withCredentials:true})
-            console.log('aca resultado like',result)
+             await axios.put(`${process.env.REACT_APP_API_BACKEND}/likes/${history.location.pathname.split('/')[2]}/${isAuth().uid}`,{},{withCredentials:true})
             setActualizar(true)
 
           }catch(err){
@@ -86,11 +86,12 @@ const Local = () => {
   }
 useEffect(()=>{
 
-console.log('aca param',param)
     if(param){
         getLocal(param)
     }
 },[])
+
+
 
 useEffect(()=>{
 
@@ -100,6 +101,8 @@ useEffect(()=>{
   }
 
 },[actualizar])
+
+
 const mapContainerStyle = {
   height: "190px",
   width: "100%",
@@ -113,8 +116,7 @@ const mapContainerStyle = {
 
          
                 <h1 className='text-center text-primary'>{ local && local.nombre }</h1>
-                <div style={{width:'80%',height:'200px',backgroundColor: 'red',margin:'auto',display:'flex',alignItems:'center',justifyContent:'center'}}>
-                <h1 className='text-center'>No image :(</h1>
+                <div style={{width:'80%',height:'500px',backgroundImage: `url(${local && local.imagen})`,backgroundRepeat:'no-repeat',backgroundPosition:'center center',margin:'auto',display:'flex',alignItems:'center',justifyContent:'center',overflow:'hidden'}}>
                 </div>
               
 

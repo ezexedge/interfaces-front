@@ -6,8 +6,14 @@ import {isAuth} from '../helpers'
 import { useHistory} from "react-router-dom";
 import { toast } from 'react-toastify';
 import GoogleMap from "../componentes/GoogleMap";
+import ReactCloudinaryUploader from '@app-masters/react-cloudinary-uploader'
 
 const  CrearLocal = () => {
+  const [values, setValues] = useState({
+   uploadedFiles: null,
+    buttonText: 'Submit',
+    uploadPhotosButtonText: 'Es obligatorio cargar una imagen'
+});
 
   const history = useHistory()
   const [inicio, setInicio] = useState('10:00');
@@ -16,13 +22,16 @@ const  CrearLocal = () => {
     lat:-34.6685004,
     lng: -58.7282483
   })
+  const [cargando,setCargando] = useState(false)
+
   const [categoriasOptions,setCategoriasOptions] = useState(null)
   const [categorias,setCategorias] = useState(null)
   const [altura,setAltura] = useState(null)
   const [calle,setCalle] = useState(null)
   const [nombre,setNombre] = useState(null)
   const [descripcion,setDescripcion] = useState(null)  
-  const [cargando,setCargando] = useState(false)
+  const {  uploadPhotosButtonText } = values;
+
 
   const onchange = (data) => {
     setLatLng(data)
@@ -33,10 +42,10 @@ const  CrearLocal = () => {
  
 }
 
-console.log('aca tengo a categoira',categorias)
-
 const crear = async(e) => {
+setCargando(true)
 
+try{
 e.preventDefault();
 
   let obj = {
@@ -50,7 +59,7 @@ e.preventDefault();
     horaApertura: inicio,
     calle: calle,
     altura: altura,
-    imagen: 'https://ichef.bbci.co.uk/news/800/cpsprodpb/127AF/production/_110259657_tv058727610.jpg.webp',
+    imagen: values.uploadedFiles[0].url,
     usuario: isAuth().uid
 
 
@@ -58,7 +67,7 @@ e.preventDefault();
 
 
 console.log('esto se muestra',obj)
- await axios.post(`${process.env.REACT_APP_API_BACKEND}/crear-local`, obj)
+ await axios.post(`${process.env.REACT_APP_API_BACKEND}/crear-local`, obj,{withCredentials:true})
 
  toast.success('creado correctamente', {
   position: "top-right",
@@ -71,6 +80,21 @@ console.log('esto se muestra',obj)
   theme: 'colored'
   });
 history.push('/panel-usuario')
+
+}catch(err){
+  console.log('aca error',err)
+
+  toast.error('No se pudo crear', {
+    position: "top-right",
+    autoClose: 5000,
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+    progress: undefined,
+    theme: 'colored'
+    });
+}
 }
 
 const getCategorias = async() => {
@@ -91,10 +115,44 @@ useEffect(()=>{
   getCategorias()
 },[])
 
+
+const subirImagen = () => {
+    alert('hola')
+}
+
+
+const uploadWidget = () => {
+  window.cloudinary.openUploadWidget(
+      {
+          cloud_name: "developer-gallardo",
+          upload_preset: "geopins",
+          multiple: false,
+          tags: ['ebooks']
+      },
+      function(error, result) {
+         console.log(result);
+          setValues({
+              ...values,
+              uploadedFiles: result,
+              uploadPhotosButtonText: `Imagen cargada`
+          });
+      }
+  );
+};
+
+
+
     return (
       <div class="container">
       <div class="row">
+
       <h1 className="text-primary text-center mt-2">Crear local</h1>
+
+ 
+      <button onClick={() => uploadWidget()} className=" my-4 btn btn-outline-secondary btn-block p-5">
+      {uploadPhotosButtonText}
+                </button>
+
 
       <form onSubmit={crear}>
 
@@ -139,7 +197,7 @@ useEffect(()=>{
   </div>
   </div>
     
-    <div className='form-group mb-4 mt-4'>
+  <div className='form-group mb-4 mt-4'>
     <label for="formGroupExampleInput">Selecciona una categoria</label>
 
     <select class="form-control form-control-lg" onChange={(e)=>setCategorias(e.target.value)}>
@@ -150,12 +208,13 @@ useEffect(()=>{
 </select>
     </div>
   
-  <div >
+  
+    <div >
   <GoogleMap search={true}  data={latLng} onchange={(e) => { onchange(e) }} />
 
   </div>
   <button type="submit" className="btn btn-primary px-4 mt-3"  
-  disabled={  altura !== null && calle !== null && nombre !== null && categorias !== null || cargando === true  ? false : true}>
+  disabled={  altura !== null && calle !== null && nombre !== null && categorias !== null && values.uploadedFiles !== null || cargando === true  ? false : true}>
   {cargando === true ?
   (
     <div class="spinner-border text-light" role="status">

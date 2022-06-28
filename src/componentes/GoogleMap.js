@@ -140,5 +140,5 @@ import PlacesAutocomplete, {
   
 
   export default GoogleApiWrapper({
-    apiKey: ('AIzaSyAXr-FMeBXB3G1Xq0p7mg8Ek2gUC-BB3a8')
+    apiKey: (process.env.REACT_APP_API_GOOGLEMAP)
   })(MapContainer)

@@ -79,6 +79,8 @@ try{
   return (
     <div className="container">
     <div className="row">
+    <h1 className="text-primary text-center mt-2">Cambiar contraseña</h1>
+    <p className="text-primary text-center mt-2">Vamos a enviarte un email para que puedas cambiar tu contraseña.</p>
         <div className=" d-flex justify-content-center">
         <form onSubmit={reset}>
   <div className="form-group">
