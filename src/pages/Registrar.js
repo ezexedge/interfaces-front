@@ -2,6 +2,7 @@ import React,{useEffect,useState} from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useHistory,Redirect,withRouter,Link } from "react-router-dom";
+import { validate } from 'react-email-validator';
 
 import 'react-toastify/dist/ReactToastify.min.css';
 
@@ -13,13 +14,43 @@ const Registrar = () => {
   const [password,setPassword] = useState('')
   const [redirect,setRedirect] = useState(false)
   const [cargando,setCargando] = useState(false)
+  const [nombreValidar,setNombreValidar] = useState(false)
+  const [apellidoValidar,setApellidoValidar] = useState(false)
+  const [passwordValidar,setPasswordValidar] = useState(false)
+  const [emailValidar,setEmailValidar] = useState(false)
   const history = useHistory();
 
   const registrarme = async(e) => {
+    setEmailValidar(false)
+    setPasswordValidar(false)
+    setNombreValidar(false)
+    setApellidoValidar(false)
+
+e.preventDefault();
+
+if(validate(email) === false){
+  setEmailValidar(true)
+}
+
+if(password.length < 6){
+  setPasswordValidar(true)
+}
+
+if(nombre === ''){
+  setNombreValidar(true)
+
+}
+
+if(apellido === ''){
+  setApellidoValidar(true)
+
+}
+
+
+if(validate(email) === false || password.length < 6 || apellido === '' || nombre === '')return
 
 setCargando(true)
 
-e.preventDefault();
 
 try{
 
@@ -74,7 +105,7 @@ try{
 }
 
   return (
-    <div className="container">
+    <div className="container" style={{marginBottom:'20%'}}>
     <div className="row">
     <h1 className="text-primary text-center mt-2">Crear cuenta</h1>
     <p className="text-primary text-center mt-2">Encuentra los locales 24 horas mas cercanos ¡en un solo lugar!</p>
@@ -108,7 +139,33 @@ try{
   </button>
 </form>
 
+
         </div>
+        <div className="msg-error container">
+          <div className='row col-12 d-flex justify-content-center  '>
+          {emailValidar === true && (
+ <p className='text-danger col-5 mt-3 text-bold text-center'>Debe ser un email valido </p>
+
+)}
+</div>
+<div className='row col-12 d-flex justify-content-center  '>
+{passwordValidar === true && (
+  <p className='text-danger col-5 mt-3 text-bold text-center'>password y el password debe ser mayor o igual 6 caracteres</p>
+)}
+</div>
+<div className='row col-12 d-flex justify-content-center  '>
+{nombreValidar === true && (
+  <p className='text-danger col-5 mt-3 text-bold text-center'>Es obligatorio llenar el  campo nombre</p>
+)}
+</div>
+<div className='row col-12 d-flex justify-content-center  '>
+{apellidoValidar === true && (
+  <p className='text-danger col-5 mt-3 text-bold text-center'>Es obligatorio llenar el  campo de apellido</p>
+)}
+</div>
+
+
+ </div>
     </div>
 
     <p className='text-center mt-3'>¿Tienes cuenta ?<Link className="mr-2" to="/login"> Iniciar sesion</Link></p>

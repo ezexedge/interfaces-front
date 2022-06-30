@@ -12,7 +12,7 @@ const  CrearLocal = () => {
   const [values, setValues] = useState({
    uploadedFiles: null,
     buttonText: 'Submit',
-    uploadPhotosButtonText: 'Es obligatorio cargar una imagen'
+    uploadPhotosButtonText: 'Cargar una imagen'
 });
 
   const history = useHistory()
@@ -147,34 +147,21 @@ const uploadWidget = () => {
       <div class="row">
 
       <h1 className="text-primary text-center mt-2">Crear local</h1>
+       <div className='mt-4'>
+      { values.uploadedFiles === null ? <p>No se cargo una imagen</p> : (
+        <img src={values.uploadedFiles[0].url}  style={{width: 'auto',height:'300px'}} />
 
- 
-      <button onClick={() => uploadWidget()} className=" my-4 btn btn-outline-secondary btn-block p-5">
+
+      )}
+      </div>
+      <button onClick={() => uploadWidget()} className=" my-4 btn btn-primary col-3 ">
       {uploadPhotosButtonText}
                 </button>
 
 
       <form onSubmit={crear}>
 
-  
- 
-  <div className="form-group  ">
-    <label for="formGroupExampleInput">Nombre del local</label>
-    <input type="text" className="form-control" onChange={(e)=>setNombre(e.target.value)}   id="formGroupExampleInput" placeholder="nombre del local"/>
-  </div>
-  <div className="form-group  ">
-    <label for="formGroupExampleInput">Calle</label>
-    <input type="text" className="form-control"  onChange={(e)=>setCalle(e.target.value)}  id="formGroupExampleInput" placeholder="calle"/>
-  </div>
-  <div className="form-group  ">
-    <label for="formGroupExampleInput">Altura</label>
-    <input type="text" className="form-control" onChange={(e)=>setAltura(e.target.value)}  id="formGroupExampleInput" placeholder="altura"/>
-  </div>
-  <div class="form-group">
-    <label for="exampleFormControlTextarea1">Descripcion</label>
-    <textarea onChange={(e)=>setDescripcion(e.target.value)} class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-  </div>
-  <div className='d-flex mt-4 mb-4'>
+      <div className='d-flex mt-4 mb-4'>
   <div className="form-group  ">
     <label for="formGroupExampleInput">Horario apertura</label>
     <TimePicker
@@ -196,6 +183,24 @@ const uploadWidget = () => {
             />
   </div>
   </div>
+ 
+  <div className="form-group  ">
+    <label for="formGroupExampleInput">Nombre del local</label>
+    <input type="text" className="form-control" onChange={(e)=>setNombre(e.target.value)}   id="formGroupExampleInput" placeholder="nombre del local"/>
+  </div>
+  <div className="form-group  ">
+    <label for="formGroupExampleInput">Calle</label>
+    <input type="text" className="form-control"  onChange={(e)=>setCalle(e.target.value)}  id="formGroupExampleInput" placeholder="calle"/>
+  </div>
+  <div className="form-group  ">
+    <label for="formGroupExampleInput">Altura</label>
+    <input type="text" className="form-control" onChange={(e)=>setAltura(e.target.value)}  id="formGroupExampleInput" placeholder="altura"/>
+  </div>
+  <div class="form-group">
+    <label for="exampleFormControlTextarea1">Descripcion</label>
+    <textarea onChange={(e)=>setDescripcion(e.target.value)} class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+  </div>
+
     
   <div className='form-group mb-4 mt-4'>
     <label for="formGroupExampleInput">Selecciona una categoria</label>

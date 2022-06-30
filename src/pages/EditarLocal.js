@@ -121,7 +121,7 @@ console.log('latttt',latLng)
 
     await axios.put(`${process.env.REACT_APP_API_BACKEND}/editar-local/${param}`, obj,{withCredentials:true})
     
-     toast.success('creado correctamente', {
+     toast.success('editado correctamente', {
       position: "top-right",
       autoClose: 5000,
       hideProgressBar: false,
@@ -211,7 +211,43 @@ return (
 
     <form onSubmit={editar}>
 
+    <div className='d-flex mt-4 mb-4'>
 
+
+{inicio !== null && fin !== null ? 
+(
+  <>
+  
+  <div className="form-group  ">
+<label for="formGroupExampleInput">Horario apertura</label>
+<TimePicker
+hour12Format
+eachInputDropdown
+manuallyDisplayDropdown
+            onChange={(newValue)=>setInicio(newValue)}
+            value={inicio}
+        />
+</div>
+<div className="form-group  ">
+<label for="formGroupExampleInput">Horario cierre</label>
+<TimePicker
+hour12Format
+eachInputDropdown
+manuallyDisplayDropdown
+            onChange={(newValue)=>setFin(newValue)}
+            value={fin}
+        />
+</div>
+
+  </>
+)
+
+:
+
+ null
+}
+
+</div>
 
 <div className="form-group  ">
   <label for="formGroupExampleInput">Nombre del local</label>
@@ -229,43 +265,7 @@ return (
   <label for="exampleFormControlTextarea1">Descripcion</label>
   <textarea  defaultValue={local !== null && local.descripcion ? local.descripcion: '' } onChange={(e)=>setDescripcion(e.target.value)} class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
 </div>
-<div className='d-flex mt-4 mb-4'>
 
-
-  {inicio !== null && fin !== null ? 
-  (
-    <>
-    
-    <div className="form-group  ">
-  <label for="formGroupExampleInput">Horario apertura</label>
-  <TimePicker
-  hour12Format
-  eachInputDropdown
-  manuallyDisplayDropdown
-              onChange={(newValue)=>setInicio(newValue)}
-              value={inicio}
-          />
-</div>
-<div className="form-group  ">
-  <label for="formGroupExampleInput">Horario cierre</label>
-  <TimePicker
-  hour12Format
-  eachInputDropdown
-  manuallyDisplayDropdown
-              onChange={(newValue)=>setFin(newValue)}
-              value={fin}
-          />
-</div>
-
-    </>
-  )
-  
-  :
-  
-   null
-  }
-
-</div>
 <div className='form-group mb-4 mt-4'>
   <label for="formGroupExampleInput">Selecciona una categoria</label>
 
@@ -296,7 +296,7 @@ disabled={ cargando === false  ? false : true}>
 </div>
 )
 :
-'Crear local'
+'Editar local'
 }
 </button>
 </form>

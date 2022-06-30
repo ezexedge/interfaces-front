@@ -7,10 +7,16 @@ class Footer extends React.Component {
  
     return (
  
-        <footer className="container">
-            <p className="float-right"><a href="#">Subir</a></p>
-            <p>&copy; {(new Date().getFullYear())} 24 Horas, Inc. &middot; <a href="#">Política de Privacidad</a> &middot; <a href="#">Términos</a></p>
-        </footer>
+<footer className='footer mt-5'>
+
+	<div class="copyright">
+		<div class="container ">
+			<div class="row">
+				 <p>{`© Copyright ${new Date().getFullYear()} 24hs`}</p>
+			</div>
+		</div>
+	</div>
+</footer>
  
     )
     

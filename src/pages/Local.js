@@ -136,7 +136,7 @@ const mapContainerStyle = {
 
                 </div>
             
-                <h3 className='text-dark text-center mt-2'>Categoria : gastronomia </h3>
+                <h3 className='text-dark text-center mt-2'>Categoria :  {local && local.nombreCategoria ? local.nombreCategoria : ''} </h3>
                 <p className='text-dark text-center mt-2'>Descripción : {local && local.descripcion} </p>
                 <p className='text-dark text-center mt-2'>calle : {local && local.calle} , altura: {local && local.altura} </p>
                 <div className="d-flex justify-content-center">
@@ -152,7 +152,10 @@ const mapContainerStyle = {
                 </div>
      
 
-            { local && local.latitud !== null && local.longitud !== null && (
+      
+
+
+            { local !== null && local.latitud !== null && local.longitud !== null ? (
 
 <div class="contenedor-mapas mt-4" style={{width:'100%',marginBottom:'33px',}}>
                 <GoogleMap
@@ -164,7 +167,10 @@ const mapContainerStyle = {
                   <Marker position={{lat:Number(local.latitud),lng:Number(local.longitud)}} />
                 </GoogleMap>
                 </div>
-)}
+)
+:
+null
+}
                 </div>
                 <DisqusThread  id={local && local.id} path={`/local/${local && local.id}`} /> 
           </div>

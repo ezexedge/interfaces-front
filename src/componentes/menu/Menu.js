@@ -1,7 +1,7 @@
 
 import React,{useEffect,useState} from 'react';
 import {Link} from 'react-router-dom'
-import {isAuth,removeLocalStorage} from '../../helpers'
+import {isAuth,removeLocalStorage,removeCookie} from '../../helpers'
 import axios from 'axios';
 import { useHistory,withRouter,Route } from "react-router-dom";
 
@@ -9,6 +9,12 @@ const Menu = () => {
 
 	const history = useHistory()
 	console.log('sss',isAuth())
+
+	const isActive = (history,path) => {
+		if(history.location.pathname === path) return {color:"#fff"}
+			else return {color: "#fff",opacity:'0.5'}
+	}
+	
 
 	const isAuthenticate = () => {
 		if(typeof  window == 'undefined'){
@@ -25,8 +31,9 @@ const Menu = () => {
 
 		try{
 
-			let result = await axios.post('http://localhost:5000/api/logout', {},{withCredentials: true})
+			let result = await axios.post(`${process.env.REACT_APP_API_BACKEND}/logout`, {},{withCredentials: true})
 			console.log('logout',result)
+			removeCookie('jwt')
 			removeLocalStorage('user')
 			history.push('/login')
 
@@ -38,20 +45,20 @@ const Menu = () => {
   	return (
 		<div>
 
-		<nav className="navbar navbar-expand-lg navbar-dark  bg-primary ">
-		<div className="container-fluid">
-		  <a className="navbar-brand" href="#">24 HORAS</a>
+		<nav className="navbar navbar-expand-lg navbar-dark  nav-menu ">
+		<div className="container pt-0 mt-0">
+		  <Link className="navbar-brand" to="/" >24 HORAS</Link>
 		  <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span className="navbar-toggler-icon"></span>
 		  </button>
 		  <div className="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul className="navbar-nav mx-auto">
 			  <li className="nav-item">
-				<Link to="/" className="nav-link" >Inicio</Link>
+				<Link to="/" style={isActive(history,`/`)}  className="nav-link " >Inicio</Link>
 			  </li>
 			  
 			  <li className="nav-item">
-				<Link className="nav-link" to="/populares">Populares</Link>
+				<Link style={isActive(history,`/populares`)}   className="nav-link" to="/populares">Populares</Link>
 			  </li>
 			
 			</ul>

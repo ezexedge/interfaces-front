@@ -5,6 +5,7 @@ import { useHistory,withRouter,Route, Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.min.css';
 import Inicio from './Inicio';
 import {getCookie, isAuth,authenticate} from '../helpers'
+import { validate } from 'react-email-validator';
 
 function ResetPassword() {
 
@@ -14,10 +15,19 @@ function ResetPassword() {
   const history = useHistory();
   const [redirect,setRedirect] = useState(false)
   const [cargando,setCargando] = useState(false)
+  const [validarEmail,setValidarEmail] = useState(false)
 
 
   const reset = async(e) => {
 e.preventDefault();
+
+setValidarEmail(false)
+
+if(validate(email) === false){
+  setValidarEmail(true)
+}
+
+if(validate(email) === false) return
 
 setCargando(true)
 
@@ -77,7 +87,7 @@ try{
 
 
   return (
-    <div className="container">
+    <div className="container" style={{marginBottom:'30%'}}>
     <div className="row">
     <h1 className="text-primary text-center mt-2">Cambiar contraseña</h1>
     <p className="text-primary text-center mt-2">Vamos a enviarte un email para que puedas cambiar tu contraseña.</p>
@@ -100,6 +110,13 @@ try{
   </button>
 </form>
 
+        </div>
+        <div className='container'>
+          <div className="row d-flex justify-content-center">
+          {validarEmail === true && (
+  <p className='text-danger col-5 mt-3 text-bold text-center'>password y el password debe ser mayor o igual 6 caracteres</p>
+)}
+          </div>
         </div>
     </div>
     <p className='text-center mt-3'>¿No tienes cuenta ?<Link className="mr-2" to="/login">  Iniciar sesión</Link></p>
