@@ -48,11 +48,11 @@ try{
 
 
  let result = await axios.post(`${process.env.REACT_APP_API_BACKEND}/login`, obj,{withCredentials:true})
- 
-console.log('result',result)
+
+
 
  authenticate(result.data.message)
-
+ setCookie('jwt',result.data.message.token)
 
  toast.info(`👋 Bienvenido ${result.data.message.nombre} ${result.data.message.apellido}!`, {
   position: "top-right",
@@ -67,7 +67,9 @@ console.log('result',result)
 
 isAuth() && history.push('/panel-usuario')
 
-setCookie('jwt',result.data.message.token)
+ console.log('aca result cookie',result.data.message)
+
+
 
 
 
