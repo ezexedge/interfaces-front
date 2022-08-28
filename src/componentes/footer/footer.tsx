@@ -1,17 +1,17 @@
 import React from 'react';
  
  
-class Footer extends React.Component {
+const Footer : React.FC = () => {
  
-  render() {
+
  
     return (
  
 <footer className='footer mt-5'>
 
-	<div class="copyright">
-		<div class="container ">
-			<div class="row">
+	<div className="copyright">
+		<div className="container ">
+			<div className="row">
 				 <p>{`© Copyright ${new Date().getFullYear()} 24hs`}</p>
 			</div>
 		</div>
@@ -20,7 +20,7 @@ class Footer extends React.Component {
  
     )
     
-  }
+  
  
 }
  

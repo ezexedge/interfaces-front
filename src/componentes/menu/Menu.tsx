@@ -5,12 +5,12 @@ import {isAuth,removeLocalStorage,removeCookie} from '../../helpers'
 import axios from 'axios';
 import { useHistory,withRouter,Route } from "react-router-dom";
 
-const Menu = () => {
+const Menu : React.FC = () => {
 
 	const history = useHistory()
 	console.log('sss',isAuth())
 
-	const isActive = (history,path) => {
+	const isActive = (history: any,path:string) => {
 		if(history.location.pathname === path) return {color:"#fff"}
 			else return {color: "#fff",opacity:'0.5'}
 	}
@@ -21,7 +21,7 @@ const Menu = () => {
 			return false
 		}
 		if(localStorage.getItem('user')){
-			return JSON.parse(localStorage.getItem('user'))
+			return JSON.parse(localStorage.getItem('user') || '')
 		}else{
 			return false
 		}

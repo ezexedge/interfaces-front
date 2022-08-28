@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, PropsWithChildren } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import {isAuth} from '../helpers'
 
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
+const PrivateRoute = ({ component: Component, ...rest }: PropsWithChildren) => (
     <Route
         {...rest}
         render={props =>

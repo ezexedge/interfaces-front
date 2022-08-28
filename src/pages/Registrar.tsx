@@ -1,10 +1,11 @@
-import React,{useEffect,useState} from 'react';
+import React,{SyntheticEvent, useEffect,useState} from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useHistory,Redirect,withRouter,Link } from "react-router-dom";
 import { validate } from 'react-email-validator';
 
 import 'react-toastify/dist/ReactToastify.min.css';
+import { TodoErrorResponse } from '../../types/request';
 
 const Registrar = () => {
 
@@ -20,7 +21,7 @@ const Registrar = () => {
   const [emailValidar,setEmailValidar] = useState(false)
   const history = useHistory();
 
-  const registrarme = async(e) => {
+  const registrarme = async(e : SyntheticEvent) => {
     setEmailValidar(false)
     setPasswordValidar(false)
     setNombreValidar(false)
@@ -80,8 +81,13 @@ try{
 
      
 }catch(err){
-  setCargando(false)
-  toast.error(err.response.data.error, {
+  if(axios.isAxiosError(err) && err.response){
+
+    let dataError : TodoErrorResponse  = err.response?.data as TodoErrorResponse
+
+
+    setCargando(false)
+  toast.error(dataError.error , {
     position: "top-right",
     autoClose: 5000,
     hideProgressBar: false,
@@ -93,6 +99,8 @@ try{
     });
 
   console.log('error',err)
+  }
+
 
 }
 
@@ -112,25 +120,25 @@ try{
         <div className=" d-flex justify-content-center">
         <form onSubmit={registrarme}>
         <div className="form-group">
-    <label for="formGroupExampleInput">Nombre</label>
+    <label >Nombre</label>
     <input type="text" className="form-control"  onChange={(e)=>setNombre(e.target.value)} id="formGroupExampleInput" placeholder="Example input"/>
   </div>
   <div className="form-group">
-    <label for="formGroupExampleInput">Apellido</label>
+    <label >Apellido</label>
     <input type="text" className="form-control"  onChange={(e)=>setApellido(e.target.value)} id="formGroupExampleInput" placeholder="Example input"/>
   </div>
   <div className="form-group">
-    <label for="formGroupExampleInput">Email</label>
+    <label >Email</label>
     <input type="text" className="form-control"  onChange={(e)=>setEmail(e.target.value)} id="formGroupExampleInput" placeholder="Example input"/>
   </div>
-  <div class="form-group">
-    <label for="formGroupExampleInput2">Password</label>
+  <div className="form-group">
+    <label >Password</label>
     <input type="password" className="form-control" onChange={(e)=>setPassword(e.target.value)}  id="formGroupExampleInput2" placeholder="Another input"/>
   </div>
   <button type="submit" className="btn btn-primary px-4 mt-3"  disabled={cargando === true ? true : false}>
   {cargando === true ?
   (
-    <div class="spinner-border text-light" role="status">
+    <div className="spinner-border text-light" role="status">
 </div>
   )
   :

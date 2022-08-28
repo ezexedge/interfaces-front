@@ -1,4 +1,4 @@
-import React,{useEffect,useState,useContext} from 'react';
+import React,{useEffect,useState,useContext, SyntheticEvent} from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { useHistory,withRouter,Route, Link } from "react-router-dom";
@@ -18,7 +18,7 @@ function ResetPassword() {
   const [validarEmail,setValidarEmail] = useState(false)
 
 
-  const reset = async(e) => {
+  const reset = async(e: SyntheticEvent) => {
 e.preventDefault();
 
 setValidarEmail(false)

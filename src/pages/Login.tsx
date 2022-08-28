@@ -1,13 +1,17 @@
-import React,{useEffect,useState,useContext} from 'react';
-import axios from 'axios';
+import React,{useEffect,useState,useContext, SyntheticEvent} from 'react';
+import axios, {AxiosError} from 'axios';
 import { toast } from 'react-toastify';
 import { useHistory,withRouter,Route, Link } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.min.css';
 import Inicio from './Inicio';
 import {getCookie, isAuth,authenticate,setCookie} from '../helpers'
 import { validate } from 'react-email-validator';
+import { TodoErrorResponse, TodoSuccessResponse,User } from '../../types/request';
+class DateIsInFutureError extends RangeError {}
 
-function Login() {
+
+
+const Login : React.FC = () => {
 
   const [email,setEmail] = useState('')
   const [password,setPassword] = useState('')
@@ -18,7 +22,7 @@ function Login() {
   const [msgError,setMsgError] = useState(false)
 
 
-  const login = async(e) => {
+  const login = async(e: SyntheticEvent) => {
 e.preventDefault();
 setEmailValidar(false)
 setPasswordValidar(false)
@@ -47,47 +51,62 @@ try{
   }
 
 
- let result = await axios.post(`${process.env.REACT_APP_API_BACKEND}/login`, obj,{withCredentials:true})
+ let result = await axios.post<TodoSuccessResponse>(`${process.env.REACT_APP_API_BACKEND}/login`, obj,{withCredentials:true})
 
+  if(result.data.message){
+    let data : User  = result.data.message
+    authenticate(data)
 
-
- authenticate(result.data.message)
- setCookie('jwt',result.data.message.token)
-
- toast.info(`👋 Bienvenido ${result.data.message.nombre} ${result.data.message.apellido}!`, {
-  position: "top-right",
-  autoClose: 5000,
-  hideProgressBar: false,
-  closeOnClick: true,
-  pauseOnHover: true,
-  draggable: true,
-  progress: undefined,
-  theme: 'dark'
-  });
-
-isAuth() && history.push('/panel-usuario')
-
- console.log('aca result cookie',result.data.message)
+    setCookie('jwt',data?.token || '')
+   
+    toast.info(`👋 Bienvenido ${result.data.message?.nombre} ${result.data.message?.apellido}!`, {
+     position: "top-right",
+     autoClose: 5000,
+     hideProgressBar: false,
+     closeOnClick: true,
+     pauseOnHover: true,
+     draggable: true,
+     progress: undefined,
+     theme: 'dark'
+     });
+   
+   isAuth() && history.push('/panel-usuario')
+   
+    console.log('aca result cookie',result.data.message)
+   
+   
+  }
 
 
 
 
 
 }catch(err){
-  setCargando(false)
 
-  console.log('ssss',err)
+  if(axios.isAxiosError(err) && err.response){
 
-  toast.error(err.response.data.error, {
-    position: "top-right",
-    autoClose: 5000,
-    hideProgressBar: false,
-    closeOnClick: true,
-    pauseOnHover: true,
-    draggable: true,
-    progress: undefined,
-    theme: 'colored'
-    });
+    let dataError : TodoErrorResponse  = err.response?.data as TodoErrorResponse
+
+    setCargando(false)
+  
+    toast.error(dataError.error, {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: 'colored'
+      });
+
+
+  }
+ 
+  
+
+
+  
 
 }
 
@@ -95,7 +114,7 @@ isAuth() && history.push('/panel-usuario')
 
 
   }
-  function validateEmail(emailAdress) {
+  function validateEmail(emailAdress : String) {
     let regexEmail = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
     if (emailAdress.match(regexEmail)) {
       return true;
@@ -122,11 +141,11 @@ useEffect(()=>{
         <div className=" d-flex justify-content-center">
         <form onSubmit={login}>
   <div className="form-group col-12">
-    <label for="formGroupExampleInput">Email</label>
+    <label >Email</label>
     <input type="text" className="form-control"  onChange={(e)=>setEmail(e.target.value)} id="formGroupExampleInput" placeholder="ingrese email"/>
   </div>
-  <div class="form-group col-12">
-    <label for="formGroupExampleInput2">Password</label>
+  <div className="form-group col-12">
+    <label >Password</label>
     <input type="password" className="form-control" onChange={(e)=>setPassword(e.target.value)}  id="formGroupExampleInput2" placeholder="ingrese password"/>
   
   </div>
@@ -136,7 +155,7 @@ useEffect(()=>{
   <button type="submit" className="btn btn-primary px-4 mt-3"  disabled={cargando === true ? true : false }>
   {cargando === true ?
   (
-    <div class="spinner-border text-light" role="status">
+    <div className="spinner-border text-light" role="status">
 </div>
   )
   :
